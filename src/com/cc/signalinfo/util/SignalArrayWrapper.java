@@ -61,8 +61,6 @@ public class SignalArrayWrapper
     // keep a copy of the raw data for debugging purposes mostly
     private String rawData;
     private        String[]           filteredArray = EMPTY_SIGNAL_ARRAY;
-    private        FilterSignalTask   task          = null;
-    private static SignalArrayWrapper instance      = null;
     private SignalListener.UpdateSignal listener;
 
     /**

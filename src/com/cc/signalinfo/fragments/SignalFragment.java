@@ -46,6 +46,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.cc.signalinfo.BuildConfig;
 import com.cc.signalinfo.R;
+import com.cc.signalinfo.activities.BaseActivity;
 import com.cc.signalinfo.dialogs.WarningDialogFragment;
 import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
@@ -251,7 +252,7 @@ public class SignalFragment extends SherlockFragment implements View.OnClickList
                 String.format(getString(R.string.copyrightDescription),
                     appVersion));
         } catch (PackageManager.NameNotFoundException ignored) {
-            Log.wtf(TAG, "Could not display app version number!");
+            Log.wtf(TAG, getString(R.string.APP_VERS_EXCEPT_MSG));
         }
     }
 

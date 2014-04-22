@@ -20,5 +20,6 @@
 
     <!-- Title to show on the warning dialog popup for the "advanced settings area" -->
     <string name="dialogWarningTitle">Warning</string>
+    <string name="APP_VERS_EXCEPT_MSG">Could not display app version number!</string>
 
 </resources>

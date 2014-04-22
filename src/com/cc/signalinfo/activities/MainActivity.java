@@ -148,7 +148,7 @@ public class MainActivity
     @Override
     public void setData(SignalArrayWrapper signalStrength)
     {
-        if (signalStrength == null) {
+            if (signalStrength == null) {
             return;
         }
         filteredSignals = signalStrength.getFilteredArray();

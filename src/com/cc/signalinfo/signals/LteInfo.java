@@ -84,16 +84,12 @@ public class LteInfo extends SignalInfo
     @Override
     public String addSignalValue(Signal type, String value)
     {
-        if (type == Signal.LTE_SNR) {
-            Log.d(TAG, String.format("LTE LTE_SNR: %s", value));
-        }
         if (type == Signal.LTE_RSRQ && !safeEquals(value, INVALID_TXT)) {
             if (value.charAt(0) != '-') {
                 // RSRQ should always be negative, fuck you Qualcomm chipsets for typically ignoring this.
                 value = '-' + value;
             }
         }
-
         String oldValue = super.addSignalValue(type, value);
 
         if (hasLteRssi()) {

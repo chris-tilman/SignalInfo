@@ -27,8 +27,8 @@ import static com.cc.signalinfo.config.AppSetup.enableStrictMode;
  */
 public class BaseActivity extends SherlockFragmentActivity
 {
-    private static final String    TAG       = BaseActivity.class.getSimpleName();
-    protected            ActionBar actionBar = null;
+    private static final String    TAG                    = BaseActivity.class.getSimpleName();
+    protected            ActionBar actionBar              = null;
 
     /**
      * Initialize the app.
@@ -147,7 +147,7 @@ public class BaseActivity extends SherlockFragmentActivity
                 String.format(getString(R.string.copyrightDescription),
                     appVersion));
         } catch (PackageManager.NameNotFoundException ignored) {
-            Log.wtf(TAG, "Could not display app version number!");
+            Log.wtf(TAG, getString(R.string.APP_VERS_EXCEPT_MSG));
         }
     }
 }

@@ -170,20 +170,23 @@ public abstract class SignalInfo implements ISignal
         if (signalValue == -1) {
             return ""; // no value set
         }
+        // ex: LTE RSRP = 80db, best = 0, worst = 76, normalized = -44db
         signalValue += name.norm(); // normalize the reading to align to zero
+        // 80db - 44db = 36db
+
         float fudgeValue = 0;
 
         if (fudgeReading && name.fudged() > 0) {
             // since we normalize, one extrema has to be 0 and the other non-zero (like 80 or whatever)
-            fudgeValue = name.best() > name.worst()
+            fudgeValue = name.best() > name.worst() // 0db > 76db
                 ? 0 // for now, no need to fudge positive stuff like SNR
-                : (name.worst() - signalValue) / 100.00f;
+                : (name.worst() - signalValue) / 100.00f; // 76 - 36 / 100 = 0.4
         }
-        float result = name.best() > name.worst()
+        float result = name.best() > name.worst() // 0db > 76db
             ? signalValue / name.best() + fudgeValue
-            : (name.worst() - signalValue) / name.worst() + fudgeValue;
+            : (name.worst() - signalValue) / name.worst() + fudgeValue; // (76db - 36db) / 76db + 0.4 → (40db / 76db) + 0.4db = 0.525 + 0.4 = .92
 
-        int percentSignal = Math.round(result * 100);
+        int percentSignal = Math.round(result * 100); // .92 * 100 = 92% strength for LTE RSRP
         percentSignal = percentSignal < 0 ? 0 : Math.abs(percentSignal);
         percentSignal = percentSignal > 100 ? 100 : percentSignal;
 
