@@ -27,18 +27,27 @@ package com.cc.signalinfo.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 import com.cc.signalinfo.R;
 import com.cc.signalinfo.config.AppSetup;
 import com.cc.signalinfo.util.SignalHelpers;
+import com.cc.signalinfo.util.system.commands.Commands;
+import com.cc.signalinfo.util.system.commands.RootCommands;
+import com.cc.signalinfo.util.system.terminal.RootTerminal;
+import com.cc.signalinfo.util.system.terminal.TerminalBase;
+
+import java.util.Map;
 
 /**
  * @author Wes Lanning
@@ -48,9 +57,11 @@ public class WarningDialogFragment extends DialogFragment
     implements DialogInterface.OnShowListener,
 
     DialogInterface.OnClickListener,
+    TerminalBase.CommandCallback,
     CompoundButton.OnCheckedChangeListener
 {
-    private View form = null;
+    private View     form     = null;
+    private Commands commands = null;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
@@ -59,6 +70,7 @@ public class WarningDialogFragment extends DialogFragment
         form = getActivity().getLayoutInflater().inflate(R.layout.warning_dialog, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         ((CheckBox) form.findViewById(R.id.dialogNoPrompt)).setOnCheckedChangeListener(this);
+        this.commands = new RootCommands(new RootTerminal(), this);
 
         builder
             .setTitle(R.string.warningDialogTitle).setView(form)
@@ -75,7 +87,15 @@ public class WarningDialogFragment extends DialogFragment
     public void onClick(DialogInterface dialogInterface, int i)
     {
         if (SignalHelpers.userConsent(getActivity().getPreferences(Context.MODE_PRIVATE))) {
-            startActivity(SignalHelpers.getAdditionalSettings());
+            try {
+                //  throw new SecurityException("fail");
+                startActivity(SignalHelpers.getAdditionalSettings());
+            } catch (SecurityException | ActivityNotFoundException ignored) {
+                // fallback for anyone that has root
+                commands.launchActivity(
+                    SignalHelpers.SETTINGS_INTENT.first,
+                    SignalHelpers.SETTINGS_INTENT.second);
+            }
         }
     }
 
@@ -109,5 +129,20 @@ public class WarningDialogFragment extends DialogFragment
         SharedPreferences settings = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(AppSetup.PROMPT_SETTING, checkState).commit();
+    }
+
+    /**
+     * @param executeResult - result of executing some commands (true if they all ran okay)
+     */
+    @Override
+    public void notifyCmdResult(Pair<Boolean, Map<String, String>> executeResult)
+    {
+        boolean executedOk = executeResult.first;
+
+        if (!executedOk) {
+            Toast.makeText(getActivity(),
+                getActivity().getString(R.string.noAdditionalSettingSupport),
+                Toast.LENGTH_LONG).show();
+        }
     }
 }
