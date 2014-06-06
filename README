@@ -10,6 +10,10 @@ I do accept pull requests if you ask nicely. Also translations to other language
 are welcomed if you want to commit the files to me replacing the strings. All
 strings for the user interface are abstracted out of the design, so easy to change.
 
+Anyone interested in translating, create an account at Transifex (https://www.transifex.com/projects/p/advanced-signal-info/).
+From the project I created there, you can see what needs translated and add it there so I can update it in the code. If the language
+you wish to translate to is not listed, just let me know and I can add it.
+
 Actual app can be found on the market: https://play.google.com/store/apps/details?id=com.cc.signalinfo
 
 Sometimes I will update it in the repo here under the root, but don't count on it being up to date.
