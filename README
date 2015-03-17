@@ -2,6 +2,8 @@ Creator: Wes Lanning
 Requires: Android 2.2+
 License: MIT
 
+NOTE: Contacting me without reading the BUILDING file first will result in being ignored. Especially if it's about building the project in Eclipse.
+
 Gives you all the available information for the CMDA/GSM/LTE Signal on your
 Android Device. Not all information may be available depending on the OEM/OS
 version of the device.
